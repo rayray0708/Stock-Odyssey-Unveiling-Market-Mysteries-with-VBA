@@ -1,0 +1,190 @@
+Attribute VB_Name = "Module1"
+Sub Stock():
+    'loop through each of the worksheets
+  For Each ws In Worksheets
+    'creating column titles
+    ws.Range("P1").Value = "Ticker"
+    ws.Range("Q1").Value = "Value"
+    ws.Range("O2").Value = "Greatest % Increase"
+    ws.Range("O3").Value = "Greatest % Decrease"
+    ws.Range("O4").Value = "Greatest Total Volume"
+    
+    ws.Range("J1").Value = "Ticker"
+    ws.Range("J1").Font.Bold = True
+    ws.Range("K1").Value = "Yearly change"
+    ws.Range("K1").Font.Bold = True
+    ws.Range("L1").Value = "Percent change"
+    ws.Range("L1").Font.Bold = True
+    ws.Range("M1").Value = "Total volume"
+    ws.Range("M1").Font.Bold = True
+    
+    Dim LastRow As LongLong
+    
+    Dim Ticker As String
+    Dim GreatestIncreaseTicker As String
+    Dim GreatestIncreaseValue As Double
+    Dim GreatestDecreaseTicker As String
+    Dim GreatestDecreaseValue As Double
+    Dim GreatestTotalTicker As String
+    Dim GreatestTotalValue As Double
+
+    Dim TotalVolume As Variant
+    
+    'Assigning values to variable
+    GreatestIncreaseValue = 0
+    GreatestDecreaseValue = 0
+    GreatestTotalValue = 0
+
+
+    'MsgBox (LastRow)
+
+    TotalVolume = 0
+    SumTableRow = 2
+   
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+    
+    'looping through the first column from row 2 to last row
+    For i = 2 To LastRow
+        
+            'check if next cell down has the same ticker name as the current's
+            If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1) Then
+                'Then assign value to the ticker variable
+                
+                Ticker = ws.Cells(i, 1).Value
+                
+               
+                'output the current ticker's name in the correspondent cell in column J
+                ws.Range("J" & SumTableRow).Value = Ticker
+                'calculate total sales volume of the current ticker
+                
+                TotalVolume = ws.Cells(i, 7).Value + TotalVolume
+                
+                'is the next total volume is bigger than the current one in the counter, save it in the counter
+                 If TotalVolume > GreatestTotalValue Then
+                        'assign final total volume value to greatest total volume cell
+                        GreatestTotalValue = TotalVolume
+                        'assign correspondent ticker
+                        GreatestTotalTicker = ws.Cells(i, 1).Value
+                    End If
+                    
+                'output result in correspondent cell in column M
+                ws.Range("M" & SumTableRow).Value = TotalVolume
+                'from BCS
+                ws.Range("M" & SumTableRow).NumberFormat = "0"
+            
+                'move down 1 row
+                SumTableRow = SumTableRow + 1
+                'reset volume to calculate new ticker's volume
+                TotalVolume = 0
+            
+            Else
+                'add previous ticker's volume to the current one if the next ticker has the same name as the current one
+                TotalVolume = TotalVolume + ws.Cells(i, 7).Value
+              
+            End If
+    Next i
+        
+    Dim YearlyChange As Double
+    Dim PercentChange As Double
+    Dim ClosingPriceBegin As Double
+    Dim ClosingPriceEnd As Double
+    Dim OpeningPrice As Double
+    
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+    
+    SumTableRow = 2
+    OpeningPrice = ws.Cells(2, 3).Value
+            'MsgBox(OpeningPrice)
+        
+    ClosingPriceEnd = 0
+
+    For i = 2 To LastRow
+        
+                'check if next ticker down is the same as the current
+                If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+                    'if not then assign its closing end price to the correspondent value in column 6
+                    ClosingPriceEnd = ws.Cells(i, 6).Value
+                    'calculate yearly change
+                    YearlyChange = ClosingPriceEnd - OpeningPrice
+                    'output yearly change result in the correspondent cell in column K
+                    ws.Range("K" & SumTableRow) = YearlyChange
+                    
+                    'check to see if opening price is equal to 0
+                    If OpeningPrice <> 0 Then
+                    'calculate percent change if opening price doesn't equal to 0
+                    PercentChange = YearlyChange / OpeningPrice
+                        
+                        'if next percent change is bigger than the current one in the counter, save it in the counter
+                        If PercentChange > GreatestIncreaseValue Then
+                            GreatestIncreaseValue = PercentChange
+                            'assign correspondent ticker name
+                            GreatestIncreaseTicker = ws.Cells(i, 1).Value
+                        End If
+                            
+                            'if next percent change is smaller than the current one in the counter, save it to the counter
+                            If PercentChange < GreatestDecreaseValue Then
+                                GreatestDecreaseValue = PercentChange
+                                'assign correspondent ticker name
+                                GreatestDecreaseTicker = ws.Cells(i, 1).Value
+                            End If
+                        
+                    'output percent change result in correspondent cell in column L
+                    ws.Range("L" & SumTableRow) = PercentChange
+                    ws.Range("L" & SumTableRow).NumberFormat = "0.00%"
+                        
+                    'while there, check if PercentChange is > 0
+                    If PercentChange > 0 Then
+                        ws.Range("L" & SumTableRow).Interior.ColorIndex = 4
+                            
+                    ElseIf PercentChange < 0 Then
+                        ws.Range("L" & SumTableRow).Interior.ColorIndex = 3
+                        
+                    Else
+                        ws.Range("L" & SumTableRow).Interior.ColorIndex = 0
+                            
+                            'while there, check if the yearly change is greater than 0
+                            If YearlyChange > 0 Then
+                            'colour the cell green if it's greater than 0
+                                ws.Range("K" & SumTableRow).Interior.ColorIndex = 4
+                        
+                            'if yearly change is less than 0
+                            ElseIf YearlyChange < 0 Then
+                            'then colour the cell red
+                                ws.Range("K" & SumTableRow).Interior.ColorIndex = 3
+                                
+                            Else
+                                ws.Range("K" & SumTableRow).Interior.ColorIndex = 0
+                        
+                            End If
+                        End If
+                    End If
+                    'add 1 row
+                    SumTableRow = SumTableRow + 1
+                    'reset opening price to the new ticker's price
+                    OpeningPrice = ws.Cells(i + 1, 3).Value
+                    'reset the closing price at the beginning of the year to the new ticker's price
+                    ClosingPriceEnd = ws.Cells(i + 1, 6)
+            End If
+             
+     Next i
+'output the values saved in the counters to correspondent cells
+ws.Range("P2").Value = GreatestIncreaseTicker
+ws.Range("P3").Value = GreatestDecreaseTicker
+ws.Range("P4").Value = GreatestTotalTicker
+ws.Range("Q2").Value = GreatestIncreaseValue
+'convert number to percentage
+ws.Range("Q2").NumberFormat = "0.00%"
+ws.Range("Q3").Value = GreatestDecreaseValue
+'convert number to percentage
+ws.Range("Q3").NumberFormat = "0.00%"
+ws.Range("Q4").Value = GreatestTotalValue
+
+Next ws
+       
+End Sub
+    
+
+
+
+
+
