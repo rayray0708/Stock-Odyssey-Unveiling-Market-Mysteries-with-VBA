@@ -1,9 +1,11 @@
 # VBA-challenge
-##Description 
+## Description 
 In this project, I'm analysing generated stock market data to uncover hidden trends and gain more insight into the dataset
-##Usage
+
+## Usage
 Open Visual Basics in Excel and run the script 
-##Credits
+
+## Credits
 Special thanks to the following individuals for their contributions:
 -Jeffery Chieh-Liu (TA team): for helping me with conditional formatting 
 -LiMei Hou (BCS tutor): for advicing me that I shouldn't have too many for-loops within a script because it would just slow down the execution process
