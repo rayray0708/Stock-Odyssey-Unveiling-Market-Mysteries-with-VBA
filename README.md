@@ -1,3 +1,4 @@
+![Illustration of the Stock Market](https://img.money.com/2022/05/News-Plunging-Stocks-401k.jpg?quality=60&w=1600 )
 # VBA-challenge
 ## Description 
 In this project, I'm analysing generated stock market data to uncover hidden trends and gain more insight into the dataset. Specifically, I'll create a script that loops through all the stocks for one year and outputs the following information:
