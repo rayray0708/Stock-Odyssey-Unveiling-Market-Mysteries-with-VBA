@@ -15,6 +15,9 @@ To see the VBA script, please navigate to "Hand in" folder and select "VBA scrip
 
 ## Credits
 Special thanks to the following individuals for their contributions:
+
 -Jeffery Chieh-Liu (TA team): for helping me with conditional formatting 
+
 -LiMei Hou (BCS tutor): for advicing me that I shouldn't have too many for-loops within a script because it would just slow down the execution process
+
 -All other AskBCS helpers: for providing me with useful functions, such as the functions to convert numbers in scientific notation to normal numbers and converting decimals to percentages
