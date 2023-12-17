@@ -23,7 +23,7 @@ In the main tab list, tick mark check box for the developer.
 
 Click 'OK'.
 
-### for Mac
+#### for Mac
 Go to Excel Menu → Preferences.
 ![Alt text](<Screenshot 2023-12-17 at 11.36.26 pm.png>)
 
